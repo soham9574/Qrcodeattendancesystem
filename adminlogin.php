@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+// $orgid= $_SESSION["orgid"] ;
+// $pass=$_SESSION["pass"];
 ?>
 
 <!DOCTYPE html>
@@ -69,45 +72,44 @@ session_start();
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Admin Login</h2>
-        <form action="" method="post">
-            <label for="adminUsername">Username:</label>
-            <input type="text" id="adminUsername" name="adminUsername" required>
-            <label for="adminPassword">Password:</label>
-            <input type="password" id="adminPassword" name="adminPassword" required>
-            <button type="submit">Login as Admin</button>
-        </form>
-    </div>
 
-    <?php
+<div class="container">
+    <h2>Admin Login</h2>
+    <form method="post">
+        <label for="adminUsername">Organization Id:</label>
+        <input type="text" id="adminUsername" name="adminUsername" required>
+        <label for="adminPassword">Password:</label>
+        <input type="password" id="adminPassword" name="adminPassword" required>
+        <button type="submit" name="loginButton">Login as Admin</button>
+    </form>
+</div>
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        include('connection.php');
-        
-        $username = $_POST['adminUsername'];
-        $password = $_POST['adminPassword'];
-        
-        $sql = "SELECT * FROM admin WHERE username = '$username' AND password = '$password'";
-        $result = $connection->query($sql);
-        
-        if ($result->num_rows > 0) {
-            header("Location: fetchtable.php");
-            $_SESSION['$adminsuc']=$username;
-            exit();
-        } else {
-            ?>
-            <script>
-            alert ("Wrong username or password");
-            header("Location: adminlogin.php");
+<?php
+if (isset($_POST['loginButton'])) {
+    include('connection.php');
+    
+    $username = $_POST['adminUsername'];
+    $password = $_POST['adminPassword'];
+    
+    $sql = "SELECT * FROM organisationdetails WHERE orgid = '$username' AND pass = '$password'";
+    $result = $connection->query($sql);
 
-            </script>
-            <?php
-
-        }
-        
-        $connection->close();
+    if ($result === false) {
+        die('Error executing the query: ' . $connection->error);
     }
-    ?>
+    
+    if ($result->num_rows > 0) {
+        session_start();
+        $_SESSION['adminsuc'] = $username;
+        header("Location: admindashboard.php");
+        exit();
+    } else {
+        echo '<script>alert("Wrong username or password");</script>';
+    }
+    
+    $connection->close();
+
+}
+?>
 </body>
 </html>

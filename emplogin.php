@@ -1,5 +1,6 @@
 <?php
 session_start();
+$_SESSION["text"] = "Scan the Qr Code for attendance";
 ?>
 
 <!DOCTYPE html>
@@ -19,7 +20,6 @@ session_start();
             align-items: center;
             height: 100vh;
         }
-
         .container {
             background-color: #fff;
             border-radius: 8px;
@@ -27,23 +27,19 @@ session_start();
             padding: 20px;
             width: 300px;
         }
-
         h2 {
             text-align: center;
             color: #007BFF;
             margin-bottom: 20px;
         }
-
         form {
             display: flex;
             flex-direction: column;
         }
-
         label {
             font-weight: bold;
             color: #333;
         }
-
         input[type="text"], input[type="password"] {
             padding: 10px;
             margin-bottom: 15px;
@@ -51,7 +47,6 @@ session_start();
             border-radius: 3px;
             font-size: 16px;
         }
-
         button[type="submit"] {
             background-color: #007BFF;
             color: #fff;
@@ -62,7 +57,6 @@ session_start();
             cursor: pointer;
             transition: background-color 0.3s ease-in-out;
         }
-
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
@@ -70,48 +64,16 @@ session_start();
 </head>
 <body>
     <div class="container">
-    <div class="container">
-        <h2>Employee Login</h2>
-        <form action="" method="post">
-            <label for="studentUsername">Username:</label>
-            <input type="text" id="studentUsername" name="empUsername" required>
-            <label for="studentPassword">Password:</label>
-            <input type="password" id="studentPassword" name="empPassword" required>
-            <button type="submit">Login as Employee</button>
+        <h2>Teacher Login</h2>
+        <form method="post" action="teacherloginaction.php">
+            <label for="orgId">Orgid:</label>
+            <input type="text" id="orgId" name="orgId" required>
+            <label for="empUsername">Userid:</label>
+            <input type="text" id="empUsername" name="empUsername" required>
+            <label for="empPassword">Password:</label>
+            <input type="password" id="empPassword" name="empPassword" required>
+            <button name="submit" type="submit">Login as teacher</button>
         </form>
     </div>
-
-
-
-    <?php
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    include('connection.php');
-    
-    $username = $_POST['empUsername'];
-    $password = $_POST['empPassword'];
-    
-    $sql = "SELECT * FROM employee WHERE username = '$username' AND password = '$password'";
-    $result = $connection->query($sql);
-    
-    if ($result->num_rows > 0) {
-        header("Location: scanqr.php");
-        $_SESSION['$empsuc']=$username;
-        exit();
-    } else {
-        ?>
-        <script>
-        alert ("Wrong username or password");
-        header("Location: emplogin.php");
-
-        </script>
-        <?php
-
-    }
-    
-    $connection->close();
-}
-?>
-
 </body>
 </html>

@@ -28,7 +28,6 @@
             background-color: #fff;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
         }
 
         h2 {
@@ -97,8 +96,10 @@
             
                 $path = 'images/';
                 $qrimage = time() . ".png";
-            
+                
+                $Organisationid = $_POST["orgid"];
                 $studentName = $_POST["studentName"];
+                $stream = $_POST["stream"];
                 $email = $_POST["email"];
                 $section = $_POST["section"];
                 $rollNo = $_POST["rollNo"];
@@ -106,13 +107,20 @@
                 $year = $_POST["year"];
                 $qrtext = $_POST['enrollmentNo'];
             
-                $enroll_search = "SELECT * FROM `studentdetails` WHERE Enrollment = $enrollmentNo";
+                // Add single quotes around $enrollmentNo in the query
+                $enroll_search = "SELECT * FROM `studentdetails_$Organisationid` WHERE Enrollment = '$enrollmentNo'";
                 $query = mysqli_query($connection, $enroll_search);
-                $enroll_count = mysqli_num_rows($query);
-            
+
+                if ($query) {
+                    $enroll_count = mysqli_num_rows($query);
+                } else {
+                    echo "Error executing query: " . mysqli_error($connection);
+                    exit();
+                }
+
                 if ($enroll_count == 0) {
-                    $sql = "INSERT INTO studentdetails (Stdname, Emailid, Section, Rollno, Enrollment, Stdyear, Attendancecount, Attendancecountper, Qrcode) 
-                        VALUES ('$studentName', '$email', '$section', '$rollNo', '$qrtext', '$year', 0, 0, '$qrimage')";
+                    $sql = "INSERT INTO studentdetails_$Organisationid (Stdname, Emailid, Section, Rollno, Enrollment, Stdyear, Branch, Attendancecount, Attendancecountper, Qrcode) 
+    VALUES ('$studentName', '$email', '$section', '$rollNo', '$qrtext', '$year', '$stream', 0, 0, '$qrimage')";
             
                     if (mysqli_query($connection, $sql)) {
                         
@@ -126,7 +134,6 @@
                         echo "<a href='" . $qrcode . "' download>Download QR Code</a>";
                         echo"</br>";
                         echo"</br>";
-                        // echo $qrtext;
                         exit();
                     } else {
                         echo "Error: " . mysqli_error($connection);
@@ -136,36 +143,7 @@
                     echo"</br>";
                 }
             }
-            
-            
-            if (isset($_GET['qrcode'])) {
-                $qrcodeData = $_GET['qrcode']; 
-                
-                $connection = mysqli_connect('localhost', 'username', 'password', 'attendancemanagement');
-            
-                if (!$connection) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-            
-            
-                $sql = "UPDATE studentdetails SET attendancecount = 1 WHERE Qrcode = '$qrcodeData'";
-            
-                if (mysqli_query($connection, $sql)) {
-                    echo "Attendance marked as 'present' for QR code: $qrcodeData";
-                } else {
-                    echo "Error updating database: " . mysqli_error($connection);
-                }
-            
-                mysqli_close($connection); 
-            } else {
-                echo "";
-            }
-            ?>
-            
-            
-            
-            
-
+        ?>
     </div>
 </body>
 </html>

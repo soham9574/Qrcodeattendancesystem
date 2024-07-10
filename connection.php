@@ -2,7 +2,7 @@
 $username = 'root';
 $password = ''; 
 $server = 'localhost';
-$db = 'attendancemanagement';
+$db = 'attendanceclasswise';
 
 $connection = mysqli_connect($server, $username, $password, $db);
 

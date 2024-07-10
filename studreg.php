@@ -105,6 +105,12 @@
     <div class="container">
         <h2>Student Registration Form</h2>
         <form method="post" action="studregaction.php" >
+
+            <div class="form-group">
+                <label for="studentName">Organisation Id:</label>
+                <input required type="text" id="orgid" name="orgid" class="input-field">
+            </div>
+
             <div class="form-group">
                 <label for="studentName">Student Name:</label>
                 <input required type="text" id="studentName" name="studentName" class="input-field">
@@ -132,6 +138,25 @@
             </div>
 
             <div class="form-group">
+    <label for="stream">Stream:</label>
+    <select required id="stream" name="stream" class="input-field">
+        <option value="CSE">CSE</option>
+        <option value="CSE AI">CSE AI</option>
+        <option value="CSE AI ML">CSE AI ML</option>
+        <option value="CSE IOT">CSE IOT</option>
+        <option value="CSE IOT CSBT">CSE IOT CSBT</option>
+        <option value="CSE CSBT">CSE CSBT</option>
+        <option value="IT">IT</option>
+        <option value="ECE">ECE</option>
+        <option value="EEE">EEE</option>
+        <option value="EE">EE</option>
+        <option value="ME">ME</option>
+        <option value="CIVIL">CIVIL</option>
+    </select>
+</div>
+
+
+            <div class="form-group">
                 <label for="year">Year:</label>
                 <select required id="year" name="year" class="input-field">
                     <option value="1">First Year</option>
@@ -144,7 +169,7 @@
             <button name="submit" type="submit">Submit</button>
         </form>
         <br>
-        <button onclick="window.location.href='index.php'" name="back" type="button">Back</button>
+        <button onclick="window.location.href='admindashboard.php'" name="back" type="button">Back</button>
     </div>
 </body>
 </html>
